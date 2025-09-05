@@ -1,0 +1,33 @@
+{
+  "name": "restoration",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "build": "npm-run-all -p build:*",
+    "build:api": "tsc -p apps/api/tsconfig.json",
+    "build:bot": "tsc -p apps/bot/tsconfig.json",
+    "build:worker": "tsc -p apps/worker/tsconfig.json",
+
+    "start:api": "node apps/api/dist/index.js",
+    "start:bot": "node apps/bot/dist/bot.js",
+    "start:worker": "node apps/worker/dist/worker.js",
+
+    "prisma:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate deploy",
+    "register": "node apps/bot/dist/registerCommands.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "axios": "^1.7.2",
+    "bullmq": "^5.11.0",
+    "discord.js": "^14.15.3",
+    "express": "^4.19.2",
+    "ioredis": "^5.4.1",
+    "npm-run-all": "^4.1.5"
+  },
+  "devDependencies": {
+    "prisma": "^5.18.0",
+    "typescript": "^5.5.4"
+  }
+}
