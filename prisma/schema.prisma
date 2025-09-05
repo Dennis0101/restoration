@@ -1,0 +1,87 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+
+model Guild {
+  id        String   @id
+  name      String?
+  createdAt DateTime @default(now())
+  snapshots    GuildSnapshot[]
+  cohorts      RecoveryCohort[]
+  settings     GuildSettings?
+}
+
+model GuildSnapshot {
+  id        String   @id @default(cuid())
+  guildId   String
+  version   Int      @default(1)
+  payload   Json
+  createdAt DateTime @default(now())
+  Guild     Guild    @relation(fields: [guildId], references: [id])
+  @@index([guildId])
+}
+
+model GuildSettings {
+  guildId        String  @id
+  logChannelId   String?
+  verifiedRoleId String?
+  filterVpn      Boolean  @default(false)
+  filterIpv6     Boolean  @default(false)
+  filterCarrier  Boolean  @default(false)
+  filterOverseas Boolean  @default(false)
+  filterPoliceMx Boolean  @default(false)
+  filterIsp3rd   Boolean  @default(false)
+  filterAlt      Boolean  @default(false)
+  requireCaptcha Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  Guild Guild @relation(fields: [guildId], references: [id])
+}
+
+model RecoveryCohort {
+  id        String   @id @default(cuid())
+  guildId   String
+  key       String   @unique
+  createdAt DateTime @default(now())
+  members   RecoveryMember[]
+  Guild Guild @relation(fields: [guildId], references: [id])
+}
+
+model RecoveryMember {
+  id               String   @id @default(cuid())
+  cohortId         String
+  userId           String
+  accessTokenEnc   String
+  refreshTokenEnc  String
+  tokenScope       String
+  tokenExpiresAt   DateTime
+  joinedAt         DateTime?
+  roleSnapshot     Json?
+  cohort RecoveryCohort @relation(fields: [cohortId], references: [id])
+  @@unique([cohortId, userId])
+}
+
+model VerificationLog {
+  id        String   @id @default(cuid())
+  guildId   String
+  userId    String
+  ip        String?
+  iso2      String?
+  city      String?
+  isp       String?
+  ua        String?
+  passed    Boolean
+  reason    String?
+  createdAt DateTime @default(now())
+  @@index([guildId, createdAt])
+}
+
+model RestoreJob {
+  id        String   @id @default(cuid())
+  cohortId  String
+  guildId   String
+  status    String   @default("pending")
+  progress  Int      @default(0)
+  error     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
