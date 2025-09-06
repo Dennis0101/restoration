@@ -2,8 +2,8 @@
 import { Worker } from 'bullmq';
 import IORedis from 'ioredis';
 import { PrismaClient } from '@prisma/client';
-import { oauthRefresh, guildsJoin, patchRoles } from '@restoration/shared/discord';
-import { dec, enc } from '@restoration/shared/crypto';
+import { oauthRefresh, guildsJoin, patchRoles } from '../../../packages/shared/dist/discord.js';
+import { dec, enc } from '../../../packages/shared/dist/crypto.js';
 
 const prisma = new PrismaClient();
 const connection = new IORedis(process.env.REDIS_URL!);
