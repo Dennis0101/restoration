@@ -9,7 +9,8 @@
   "scripts": {
     "prebuild": "npm run prisma:generate",
 
-    "build": "npm-run-all -p build:*",
+    "build": "npm run build:shared && npm-run-all -p build:api build:bot build:worker",
+    "build:shared": "npm --workspace @restoration/shared run build",
     "build:api": "tsc -p apps/api/tsconfig.json",
     "build:bot": "tsc -p apps/bot/tsconfig.json",
     "build:worker": "tsc -p apps/worker/tsconfig.json",
@@ -26,6 +27,7 @@
     "register": "node apps/bot/dist/registerCommands.js"
   },
   "dependencies": {
+    "@restoration/shared": "workspace:*",
     "@prisma/client": "^5.18.0",
     "axios": "^1.7.2",
     "bullmq": "^5.11.0",
