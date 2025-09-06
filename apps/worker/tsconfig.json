@@ -4,10 +4,16 @@
   "compilerOptions": {
     "outDir": "./dist",
 
-    "baseUrl": ".",
+    "module": "NodeNext",              // ⬅️ 추가/수정
     "moduleResolution": "NodeNext",
+
+    "baseUrl": ".",
     "paths": {
       "@restoration/shared/*": ["../../packages/shared/dist/*"]
-    }
+    },
+    "target": "ES2022",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   }
 }
