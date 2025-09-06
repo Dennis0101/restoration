@@ -1,4 +1,5 @@
 import { Worker } from 'bullmq';
+import { someFn } from "@api/discord";
 import IORedis from 'ioredis';
 import { PrismaClient } from '@prisma/client';
 import { oauthRefresh, guildsJoin, patchRoles } from '../../api/src/discord';
