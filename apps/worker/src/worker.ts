@@ -1,12 +1,13 @@
 // apps/worker/src/worker.ts
 import { Worker } from 'bullmq';
-import IORedis from 'ioredis';
+import Redis from 'ioredis'; // ✅ 기본 import로 변경
 import { PrismaClient } from '@prisma/client';
+// shared는 dist + .js 확장자까지 명시 (NodeNext/ESM)
 import { oauthRefresh, guildsJoin, patchRoles } from '../../../packages/shared/dist/discord.js';
 import { dec, enc } from '../../../packages/shared/dist/crypto.js';
 
 const prisma = new PrismaClient();
-const connection = new IORedis(process.env.REDIS_URL!);
+const connection = new Redis(process.env.REDIS_URL!); // ✅ 생성자 변경
 
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
